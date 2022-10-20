@@ -37,10 +37,12 @@ export async function doQueryIssues(
   const issueCreator = core.getInput('issue-creator');
   const issueAssignee = core.getInput('issue-assignee');
   const issueMentioned = core.getInput('issue-mentioned');
+  const issueMilestone = core.getInput('issue-milestone');
 
   if (issueCreator) params.creator = issueCreator;
   if (issueAssignee) params.assignee = issueAssignee;
   if (issueMentioned) params.mentioned = issueMentioned;
+  if (issueMilestone) params.milestone = await ICE.getMilestoneNumber(issueMilestone);
 
   const labels = core.getInput('labels');
 
@@ -248,6 +250,7 @@ export async function doFindIssues() {
         state: issue.state,
         created: issue.created_at,
         updated: issue.updated_at,
+        milestone: issue.milestone
       };
     });
     if (direction === 'desc') {

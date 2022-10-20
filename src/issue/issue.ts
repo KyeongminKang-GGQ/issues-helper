@@ -188,6 +188,26 @@ export class IssueCoreEngine implements IIssueCoreEngine {
     return comments;
   }
 
+  public async getMilestoneNumber(milestoneName: string) {
+    const { octokit, owner, repo } = this;
+    const { data } = await octokit.issues.listMilestonesForRepo({
+      owner,
+      repo
+    });
+    const milestone = data
+      .find((m: { title: string; }) => m.title === milestoneName);
+
+    if (milestone === undefined) {
+      throw new Error(`Create Milestone with the name "${milestoneName}" failed`);
+    }
+
+    const milestoneNumber = milestone.number;
+    if (milestoneNumber === undefined) {
+      throw new Error(`Milestone with the name "${milestoneName}" number was not found.`);
+    }
+    return milestoneNumber;
+  }
+
   public async listIssues(params: IListIssuesParams, page = 1) {
     const { octokit, owner, repo } = this;
     const { data } = await octokit.issues.listForRepo({

@@ -20,6 +20,7 @@ export interface IListIssuesParams {
   assignee?: string;
   mentioned?: string;
   labels?: string;
+  milestone?: number;
 }
 
 export type TIssueInfo = {
@@ -93,6 +94,7 @@ export interface IIssueCoreEngine {
   getUserPermission: (username: string) => Promise<TUserPermission>;
 
   listComments: () => Promise<TCommentList>;
+  getMilestoneNumber: (milestoneName: string) => Promise<number>;
   listIssues: (params: IListIssuesParams) => Promise<TIssueList>;
   lockIssue: (lockReason: TLockReasons) => Promise<void>;
 
