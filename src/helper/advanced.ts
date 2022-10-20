@@ -43,10 +43,6 @@ export async function doQueryIssues(
   if (issueCreator) params.creator = issueCreator;
   if (issueAssignee) params.assignee = issueAssignee;
   if (issueMentioned) params.mentioned = issueMentioned;
-  if (issueMilestone) {
-    params.milestone = await ICE.getMilestoneNumber(issueMilestone);
-    core.info(`[doQueryIssues] milestoneNumber --> ${params.milestone}`);
-  }
 
   const labels = core.getInput('labels');
 
@@ -68,12 +64,15 @@ export async function doQueryIssues(
     issuesList.forEach(issue => {
       const bodyCheck = bodyIncludes ? issue.body.includes(bodyIncludes) : true;
       const titleCheck = titleIncludes ? issue.title.includes(titleIncludes) : true;
+      const milestoneCheck = issueMilestone
+        ? issue.milestone?.title?.includes(issueMilestone)
+        : true;
       /**
        * Note: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request.
        * For this reason, "Issues" endpoints may return both issues and pull requests in the response.
        * You can identify pull requests by the pull_request key.
        */
-      if (bodyCheck && titleCheck && issue.pull_request === undefined) {
+      if (bodyCheck && titleCheck && milestoneCheck && issue.pull_request === undefined) {
         if (excludeLabelsArr.length) {
           if (issue.labels.length) {
             for (let i = 0; i < issue.labels.length; i += 1) {
@@ -255,7 +254,7 @@ export async function doFindIssues() {
         state: issue.state,
         created: issue.created_at,
         updated: issue.updated_at,
-        milestone: issue.milestone
+        milestone: issue.milestone,
       };
     });
     if (direction === 'desc') {

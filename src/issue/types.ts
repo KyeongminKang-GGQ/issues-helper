@@ -20,7 +20,7 @@ export interface IListIssuesParams {
   assignee?: string;
   mentioned?: string;
   labels?: string;
-  milestone?: number;
+  milestone?: string;
 }
 
 export type TIssueInfo = {
@@ -40,7 +40,9 @@ export type TIssueInfo = {
   created_at: string;
   updated_at: string;
   pull_request?: any;
-  milestone?: number;
+  milestone?: {
+    title: string;
+  };
 };
 
 export type TIssueList = TIssueInfo[];

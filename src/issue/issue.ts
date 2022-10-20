@@ -190,12 +190,11 @@ export class IssueCoreEngine implements IIssueCoreEngine {
 
   public async getMilestoneNumber(milestoneName: string) {
     const { octokit, owner, repo } = this;
-    const { data } = await octokit.issues.listMilestonesForRepo({
+    const { data } = await octokit.issues.listMilestones({
       owner,
-      repo
+      repo,
     });
-    const milestone = data
-      .find((m: { title: string; }) => m.title === milestoneName);
+    const milestone = data.find((m: { title: string }) => m.title === milestoneName);
 
     if (milestone === undefined) {
       throw new Error(`Create Milestone with the name "${milestoneName}" failed`);
