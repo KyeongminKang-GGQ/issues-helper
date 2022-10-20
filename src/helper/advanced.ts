@@ -38,11 +38,15 @@ export async function doQueryIssues(
   const issueAssignee = core.getInput('issue-assignee');
   const issueMentioned = core.getInput('issue-mentioned');
   const issueMilestone = core.getInput('issue-milestone');
+  core.info(`[doQueryIssues] issueMilestone --> ${issueMilestone}`);
 
   if (issueCreator) params.creator = issueCreator;
   if (issueAssignee) params.assignee = issueAssignee;
   if (issueMentioned) params.mentioned = issueMentioned;
-  if (issueMilestone) params.milestone = await ICE.getMilestoneNumber(issueMilestone);
+  if (issueMilestone) {
+    params.milestone = await ICE.getMilestoneNumber(issueMilestone);
+    core.info(`[doQueryIssues] milestoneNumber --> ${params.milestone}`);
+  }
 
   const labels = core.getInput('labels');
 
@@ -50,6 +54,7 @@ export async function doQueryIssues(
 
   if (creator) params.creator = creator;
 
+  core.info(`[doQueryIssues] params --> ${params}`);
   const issuesList = await ICE.listIssues(params);
   const issues: TIssueList = [];
   const issueNumbers: number[] = [];

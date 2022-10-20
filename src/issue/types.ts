@@ -40,6 +40,7 @@ export type TIssueInfo = {
   created_at: string;
   updated_at: string;
   pull_request?: any;
+  milestone?: number;
 };
 
 export type TIssueList = TIssueInfo[];

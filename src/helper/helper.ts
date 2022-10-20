@@ -99,6 +99,7 @@ export class IssueHelperEngine implements IIssueHelperEngine {
 
   private initIssueCore() {
     const { owner, repo, issueNumber } = this;
+    const issueMilestone = core.getInput("issue-milestone");
     const token = core.getInput('token');
     this.ICE = new IssueCoreEngine({
       owner,
@@ -106,7 +107,7 @@ export class IssueHelperEngine implements IIssueHelperEngine {
       issueNumber,
       token,
     });
-    core.info(`[Init] [${owner}/${repo} => ${issueNumber}]`);
+    core.info(`[Init] [${owner}/${repo} => issueNumber: ${issueNumber}, issueMilestone: ${issueMilestone}]`);
   }
 
   public async doExeAction(action: TAction) {
