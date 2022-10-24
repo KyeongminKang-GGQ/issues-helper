@@ -64,9 +64,11 @@ export async function doQueryIssues(
     issuesList.forEach(issue => {
       const bodyCheck = bodyIncludes ? issue.body.includes(bodyIncludes) : true;
       const titleCheck = titleIncludes ? issue.title.includes(titleIncludes) : true;
-      const milestoneCheck = issueMilestone
-        ? issue.milestone?.title?.includes(issueMilestone)
-        : true;
+      // Issue's milestone is undefiend or milestoneName is exactly the same.
+      const milestoneCheck =
+        !issue.milestone || issueMilestone
+          ? issue.milestone?.title?.includes(issueMilestone)
+          : true;
       /**
        * Note: GitHub's REST API v3 considers every pull request an issue, but not every issue is a pull request.
        * For this reason, "Issues" endpoints may return both issues and pull requests in the response.
